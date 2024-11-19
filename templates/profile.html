@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <p>GitHub Link: <a href="{{ profile.github_profile_url }}">{{ profile.github_link }}</a></p>
+
+    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo">
+    {% else %}
+        <p>No photo available</p>
+    {% endif %}
+</body>
+</html>
