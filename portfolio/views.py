@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from .models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from .models import Profile
 from .forms import CreateProfileForm
 from django.contrib.auth.views import LoginView
@@ -46,5 +46,18 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
             form.instance.save()
         else:
             form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = CreateProfileForm
+    template_name = 'update_profile.html'
+    success_url = '/accounts/profile/'
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
