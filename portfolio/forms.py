@@ -4,4 +4,4 @@ from .models import Profile
 class CreateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['github_link', 'photo']
+        fields = ['github_link', 'photo', 'about_me']

@@ -3,8 +3,10 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    github_link = models.URLField(max_length=200, default='https://github.com/dashboard')
-    photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/default.jpg')
+    github_link = models.URLField(max_length=200, blank=True, null=True)
+    photo = models.ImageField(upload_to='media/', blank=True, null=True)
+    about_me = models.TextField(blank=True)
+
 
     @property
     def github_profile_url(self):

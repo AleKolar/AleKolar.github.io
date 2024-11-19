@@ -19,7 +19,7 @@ def register_view(request):
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
-    success_url = 'profile.html/'
+    success_url = '/accounts/profile/'
 
 def profile_view(request):
     profile = Profile.objects.first()
@@ -33,8 +33,18 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
     model = Profile
     form_class = CreateProfileForm
     template_name = 'create_profile.html'
-    success_url = '/success/'
+    success_url = '/accounts/profile/'
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        profile_exists = Profile.objects.filter(user=self.request.user).exists()
+        if profile_exists:
+            profile = Profile.objects.get(user=self.request.user)
+            form.instance = profile
+            form.instance.user = self.request.user
+            form.instance.photo = form.cleaned_data['media']
+            form.instance.about_me = form.cleaned_data['about_me']
+            form.instance.save()
+        else:
+            form.instance.user = self.request.user
         return super().form_valid(form)
+
