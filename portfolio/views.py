@@ -41,7 +41,8 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
             profile = Profile.objects.get(user=self.request.user)
             form.instance = profile
             form.instance.user = self.request.user
-            form.instance.photo = form.cleaned_data['media']
+            # form.instance.photo = form.cleaned_data['media']
+            form.instance.photo = self.request.FILES['media']
             form.instance.about_me = form.cleaned_data['about_me']
             form.instance.save()
         else:
