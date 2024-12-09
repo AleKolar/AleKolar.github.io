@@ -7,12 +7,20 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='media/', blank=True, null=True)
     about_me = models.TextField(blank=True)
 
-
     @property
     def github_profile_url(self):
         return f"https://github.com/{self.github_link}"
 
     def __str__(self):
         return self.user.username + "'s Profile"
+
+class Achievements(models.Model):
+    name = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    achievements = models.CharField(max_length=255,blank=True, null=True)
+    skills = models.CharField(max_length=255, blank=True, null=True)
+    certificates = models.ImageField(upload_to='media/', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
 
 

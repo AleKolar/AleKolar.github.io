@@ -1,25 +1,24 @@
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "admin/css/styles.css" %}" type="text/css" media="screen" />
+</head>
+<body>
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <p>GitHub Link: <a href="{{ profile.github_profile_url }}">{{ profile.github_link }}</a></p>
 
-{% block content %}
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Profile</title>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
-    </head>
-    <body>
-        <h1>{{ profile.user.username }}'s Profile</h1>
-        <p>GitHub Link: <a href="{{ profile.github_profile_url }}">{{ profile.github_link }}</a></p>
+    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-photo">
+    {% else %}
+        <p>No photo available</p>
+    {% endif %}
 
-        {% if profile.photo %}
-            <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-photo">
-        {% else %}
-            <p>No photo available</p>
-        {% endif %}
+    <p>About Me: {{ profile.about_me }}</p>
 
-        <p>About Me: {{ profile.about_me }}</p>
-    </body>
-    </html>
-{% endblock %}
+    <a href="{% url 'achievements' %}">Achievements</a>
+</body>
+</html>

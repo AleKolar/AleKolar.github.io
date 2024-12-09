@@ -1,0 +1,20 @@
+{% load static %}
+<html>
+<head>
+    <title>Achievements</title>
+</head>
+<body>
+    <h1>Achievements</h1>
+    <ul>
+        {% for achievement in achievements %}
+            <li>
+                <p>Name: {{ achievement.name }}</p>
+                <p>Achievements: {{ achievement.achievements }}</p>
+                <p>Skills: {{ achievement.skills }}</p>
+                <p>Certificates: {{ achievement.certificates }}</p>
+                <img src="{{ achievement.photo.url }}" alt="Achievement Photo">
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

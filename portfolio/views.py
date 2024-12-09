@@ -1,10 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from .models import Profile
+from .models import Profile, Achievements
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
 from .models import Profile
-from .forms import CreateProfileForm
+from .forms import CreateProfileForm, CreateAchievementsForm
 from django.contrib.auth.views import LoginView
 
 def register_view(request):
@@ -39,11 +39,9 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
         profile_exists = Profile.objects.filter(user=self.request.user).exists()
         if profile_exists:
             profile = Profile.objects.get(user=self.request.user)
-            form.instance = profile
             form.instance.user = self.request.user
-            # form.instance.photo = form.cleaned_data['media']
-            form.instance.photo = self.request.FILES['media']
-            form.instance.about_me = form.cleaned_data['about_me']
+            form.instance.photo = form.cleaned_data.get('photo')  # Используйте правильное имя поля
+            form.instance.about_me = form.cleaned_data.get('about_me')  # Установите значение поля about_me из cleaned_data
             form.instance.save()
         else:
             form.instance.user = self.request.user
@@ -61,4 +59,35 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+from django.urls import reverse
+from django.shortcuts import redirect
+
+class CreateAchievementsView(LoginRequiredMixin, CreateView):
+    model = Achievements
+    form_class = CreateAchievementsForm
+    template_name = 'create_achievements.html'
+
+    def form_valid(self, form):
+        profile = self.request.user.profile
+        form.instance.name = profile
+        form.instance.achievements = form.cleaned_data['achievements']
+        if 'certificates' in self.request.FILES:
+            form.instance.photo = self.request.FILES['media']
+        if 'skills' in form.cleaned_data:
+            form.instance.skills = form.cleaned_data['skills']
+        form.instance.save()
+
+        return redirect('achievements')
+
+    def get_success_url(self):
+        return reverse('achievements')
+
+def achievements_view(request):
+    achievements = Achievements.objects.all()
+    context = {
+        'achievements': achievements,
+    }
+    return render(request, 'achievements.html', context)
 
