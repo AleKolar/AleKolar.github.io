@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
+
 from .models import Profile, Achievements
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
@@ -40,8 +42,8 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
         if profile_exists:
             profile = Profile.objects.get(user=self.request.user)
             form.instance.user = self.request.user
-            form.instance.photo = form.cleaned_data.get('photo')  # Используйте правильное имя поля
-            form.instance.about_me = form.cleaned_data.get('about_me')  # Установите значение поля about_me из cleaned_data
+            form.instance.photo = form.cleaned_data.get('photo')
+            form.instance.about_me = form.cleaned_data.get('about_me')
             form.instance.save()
         else:
             form.instance.user = self.request.user
@@ -58,11 +60,10 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.photo = form.cleaned_data.get('photo')
+        form.instance.save()
         return super().form_valid(form)
 
-
-from django.urls import reverse
-from django.shortcuts import redirect
 
 class CreateAchievementsView(LoginRequiredMixin, CreateView):
     model = Achievements
@@ -73,8 +74,9 @@ class CreateAchievementsView(LoginRequiredMixin, CreateView):
         profile = self.request.user.profile
         form.instance.name = profile
         form.instance.achievements = form.cleaned_data['achievements']
+        form.instance.certificates = form.cleaned_data.get('certificates')
         if 'certificates' in self.request.FILES:
-            form.instance.photo = self.request.FILES['media']
+            form.instance.certificates = self.request.FILES['media']
         if 'skills' in form.cleaned_data:
             form.instance.skills = form.cleaned_data['skills']
         form.instance.save()
@@ -90,4 +92,26 @@ def achievements_view(request):
         'achievements': achievements,
     }
     return render(request, 'achievements.html', context)
+
+class UpdateAchievementsView(LoginRequiredMixin, UpdateView):
+    model = Achievements
+    form_class = CreateAchievementsForm
+    template_name = 'update_achievements.html'
+    success_url = reverse_lazy('achievements')
+
+    def get_object(self, queryset=None):
+        return Achievements.objects.get(pk=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        profile = self.request.user.profile
+        form.instance.name = profile
+        form.instance.achievements = form.cleaned_data['achievements']
+        form.instance.certificates = form.cleaned_data.get('certificates')
+        if 'media' in self.request.FILES:
+            form.instance.certificates = self.request.FILES['media']
+        if 'skills' in form.cleaned_data:
+            form.instance.skills = form.cleaned_data['skills']
+        form.instance.save()
+
+        return super().form_valid(form)
 

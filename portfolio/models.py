@@ -16,9 +16,9 @@ class Profile(models.Model):
 
 class Achievements(models.Model):
     name = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    achievements = models.CharField(max_length=255,blank=True, null=True)
-    skills = models.CharField(max_length=255, blank=True, null=True)
-    certificates = models.ImageField(upload_to='media/', blank=True, null=True)
+    achievements = models.CharField(max_length=200)
+    skills = models.CharField(max_length=200)
+    certificates = models.FileField(upload_to='media/', blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
