@@ -5,14 +5,14 @@ from .models import Profile, Achievements
 
 
 class CreateProfileForm(forms.ModelForm):
-    photo = forms.ImageField(label='Profile Photo')  # Добавлено описание для поля
+    photo = forms.ImageField(label='Profile Photo')
 
     class Meta:
         model = Profile
         fields = ['github_link', 'photo', 'about_me']
 
 class CreateAchievementsForm(forms.ModelForm):
-    certificates = forms.ImageField(label='Certificates')  # Добавлено описание для поля
+    certificates = forms.ImageField(label='Certificates')
 
     class Meta:
         model = Achievements

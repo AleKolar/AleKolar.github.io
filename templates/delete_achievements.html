@@ -1,0 +1,14 @@
+{% load static %}
+<html>
+<head>
+    <title>Delete Achievements</title>
+</head>
+<body>
+    <h1>Delete Achievements</h1>
+    <p>Are you sure you want to delete this achievement?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>

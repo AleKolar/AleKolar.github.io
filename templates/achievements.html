@@ -1,4 +1,5 @@
 {% load static %}
+
 <html>
 <head>
     <title>Achievements</title>
@@ -12,7 +13,11 @@
                 <p>Achievements: {{ achievement.achievements }}</p>
                 <p>Skills: {{ achievement.skills }}</p>
                 <p>Certificates: {{ achievement.certificates }}</p>
-                <img src="{{ achievement.certificates.url }}" alt="Achievement certificates">
+                <img src="{% if achievement.certificates %}{% static achievement.certificates.url %}{% endif %}" alt="Achievement certificates">
+                <form action="{% url 'delete_achievements' achievement.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
             </li>
         {% endfor %}
     </ul>
