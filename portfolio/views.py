@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
@@ -41,9 +42,11 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
         profile_exists = Profile.objects.filter(user=self.request.user).exists()
         if profile_exists:
             profile = Profile.objects.get(user=self.request.user)
+            form.instance = profile
             form.instance.user = self.request.user
-            form.instance.photo = form.cleaned_data.get('photo')
-            form.instance.about_me = form.cleaned_data.get('about_me')
+            # form.instance.photo = form.cleaned_data['media']
+            form.instance.photo = self.request.FILES['photo']
+            form.instance.about_me = form.cleaned_data['about_me']
             form.instance.save()
         else:
             form.instance.user = self.request.user
@@ -60,10 +63,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.photo = form.cleaned_data.get('photo')
-        form.instance.save()
         return super().form_valid(form)
-
 
 class CreateOrUpdateAchievementsView(LoginRequiredMixin, UpdateView):
     model = Achievements

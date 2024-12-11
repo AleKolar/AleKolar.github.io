@@ -5,20 +5,25 @@
     <title>Achievements</title>
 </head>
 <body>
+    <a href="{% url 'profile' %}">Home</a>
     <h1>Achievements</h1>
     <ul>
         {% for achievement in achievements %}
-            <li>
-                <p>Name: {{ achievement.name }}</p>
-                <p>Achievements: {{ achievement.achievements }}</p>
-                <p>Skills: {{ achievement.skills }}</p>
-                <p>Certificates: {{ achievement.certificates }}</p>
-                <img src="{% if achievement.certificates %}{% static achievement.certificates.url %}{% endif %}" alt="Achievement certificates">
-                <form action="{% url 'delete_achievements' achievement.pk %}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" value="Delete">
-                </form>
-            </li>
+        <li>
+            <p>Name: {{ achievement.name }}</p>
+            <p>Achievements: {{ achievement.achievements }}</p>
+            <p>Skills: {{ achievement.skills }}</p>
+            <p>Certificates: {{ achievement.certificates }}</p>
+            {% if achievement.certificates %}
+                <img src="{{ achievement.certificates.url }}" alt="Achievement certificates">
+            {% else %}
+                <p>No certificates available</p>
+            {% endif %}
+            <form action="{% url 'delete_achievements' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete">
+            </form>
+        </li>
         {% endfor %}
     </ul>
 </body>

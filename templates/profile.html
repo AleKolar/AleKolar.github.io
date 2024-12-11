@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>{{ profile.user.username }}'s Profile</h1>
-    <p>GitHub Link: <a href="{{ profile.github_profile_url }}">{{ profile.github_link }}</a></p>
+    <p>GitHub Link: <a href="{{ profile.github_link }}">{{ profile.github_link }}</a></p>
 
     {% if profile.photo %}
         <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-photo">

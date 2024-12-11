@@ -12,12 +12,13 @@ urlpatterns = [
     path('create_profile/', CreateProfileView.as_view(), name='create_profile'),
     path('login/', CustomLoginView.as_view(), name='login'),
     path('register/', register_view, name='register'),
+    path('update/', CreateProfileView.as_view(), name='update_profile'),
     path('create_update', CreateOrUpdateAchievementsView.as_view(), name='create_or_update_achievements'),
     path('achievements/', achievements_view, name='achievements'),
     path('accounts/achievements/', achievements_view, name='achievements'),
     path('accounts/create_achievements/', CreateOrUpdateAchievementsView.as_view(), name='create_achievements'),
     path('achievements/<int:pk>/update/', CreateOrUpdateAchievementsView.as_view(), name='update_achievements'),
-    path('achievements/<int:pk>/delete/', DeleteAchievementsView.as_view(), name='delete_achievements'),
+    path('delete/', DeleteAchievementsView.as_view(), name='delete_achievements'),
 
 ]
 
